@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="morph-1.5">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/morph-1.5.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
