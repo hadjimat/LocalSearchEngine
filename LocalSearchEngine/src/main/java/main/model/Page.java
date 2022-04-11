@@ -10,7 +10,7 @@ import java.util.Collection;
 @Getter
 @Setter
 @Entity
-@Table(name = "Pages" )
+@Table(name = "_page" )
 @NoArgsConstructor
 public class Page {
 
@@ -32,7 +32,8 @@ public class Page {
     private Collection<Index> indicesById;
 
     @ManyToOne
-    @JoinColumn(name = "site_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "site_id", referencedColumnName = "id", nullable = false,
+            foreignKey = @ForeignKey(foreignKeyDefinition = "FOREIGN KEY (site_id) REFERENCES _site(id) ON DELETE CASCADE"))
     private Site siteBySiteId;
 
     public Page(String path, int statusCode, String content, Site siteBySiteId) {

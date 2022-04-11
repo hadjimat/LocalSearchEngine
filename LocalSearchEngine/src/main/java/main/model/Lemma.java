@@ -11,7 +11,7 @@ import java.util.Collection;
 @Getter
 @Setter
 @Entity
-@Table(name = "lemmas")
+@Table(name = "_lemma")
 @NoArgsConstructor
 public class Lemma {
 
@@ -31,7 +31,8 @@ public class Lemma {
     private Collection<Index> indicesById;
 
     @ManyToOne()
-    @JoinColumn(name = "site_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "site_id", referencedColumnName = "id", nullable = false,
+            foreignKey = @ForeignKey(foreignKeyDefinition = "FOREIGN KEY (site_id) REFERENCES _site(id) ON DELETE CASCADE"))
     private Site siteBySiteId;
 
     public Lemma(String lemma, int frequency, Site siteBySiteId) {

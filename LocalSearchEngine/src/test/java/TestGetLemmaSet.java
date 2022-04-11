@@ -19,7 +19,6 @@ public class TestGetLemmaSet {
         Document document = connection.get();
         String bodyText = document.body().text();
         String titleText =  document.title();
-        System.out.println(lemmatisator.getLemmaSet(bodyText + " " + titleText));
     }
 
     @Test

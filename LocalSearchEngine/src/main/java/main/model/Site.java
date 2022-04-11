@@ -1,14 +1,16 @@
 package main.model;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
 
 @Entity
-@Data
-@Table(name = "sites", schema = "search_engine")
+@Getter
+@Setter
+@RequiredArgsConstructor
+@Table(name = "_site", schema = "search_engine")
 public class Site {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -32,8 +34,11 @@ public class Site {
     private String name;
 
     @OneToMany(mappedBy = "siteBySiteId")
+    @ToString.Exclude
     private Collection<Lemma> lemmataById;
 
     @OneToMany(mappedBy = "siteBySiteId")
+    @ToString.Exclude
     private Collection<Page> pagesById;
+
 }

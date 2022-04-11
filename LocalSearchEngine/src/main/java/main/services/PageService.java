@@ -16,10 +16,6 @@ public class PageService {
 
     public Page createPageAndSave(String path, int code, String content, Site site) {
         Page page = new Page(path, code, content, site);
-//        page.setPath(path);
-//        page.setStatusCode(code);
-//        page.setContent(content);
-//        page.setSiteBySiteId(site);
         pageRepository.save(page);
         return page;
     }

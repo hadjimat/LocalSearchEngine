@@ -11,16 +11,15 @@ import java.util.*;
 public class Lemmatisator {
 
 
-    HashMap<String, Float> wordCountMap = new HashMap<String, Float>();
+
     LuceneMorphology luceneMorph = new RussianLuceneMorphology();
 
     public Lemmatisator() throws IOException {
     }
 
     public HashMap<String, Float> getLemmasOnField(String text) throws IOException {
-
         String[] splitText = text.toLowerCase().replaceAll("[^а-яА-Я_\\s]", "").replaceAll("[0-9]","").split(" ");
-
+        HashMap<String, Float> wordCountMap = new HashMap<String, Float>();
         for (String word : splitText) {
             if (isCorrectWordType(word) && !word.isEmpty()) {
                 List<String> wordBaseForms = luceneMorph.getNormalForms(word);

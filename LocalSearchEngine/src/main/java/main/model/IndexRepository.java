@@ -18,18 +18,18 @@ public interface IndexRepository extends JpaRepository<Index, Integer> {
 
     List<IndexPageId> findByLemmaIdAndPageIdIn(int lemmaId, List<Integer> pageIds);
 
-    @Query(value = "SELECT sites.url AS site, " +
-            "sites.name AS siteName, " +
-            "pages.path AS uri, " +
-            "pages.content AS content, " +
+    @Query(value = "SELECT _site.url AS site, " +
+            "_site.name AS siteName, " +
+            "page.path AS uri, " +
+            "page.content AS content, " +
             "SUM(lemma_rank)/relrev.maxrev AS relevance " +
-            "FROM indexes JOIN " +
-            "(SELECT MAX(absrev) AS maxrev FROM (SELECT page_id, SUM(lemma_rank) AS absrev FROM indexes " +
+            "FROM _index JOIN " +
+            "(SELECT MAX(absrev) AS maxrev FROM (SELECT page_id, SUM(lemma_rank) AS absrev FROM _index " +
             "WHERE page_id IN (?1) " +
             "AND lemma_id IN (?2) " +
             "GROUP BY page_id) AS result) AS relrev " +
-            "JOIN pages AS page ON indexes.page_id = page.id " +
-            "JOIN sites ON page.site_id = _site.id " +
+            "JOIN _page AS page ON _index.page_id = page.id " +
+            "JOIN _site ON page.site_id = _site.id " +
             "WHERE page_id IN (?1) " +
             "AND lemma_id IN (?2) " +
             "GROUP BY page_id ORDER BY relevance DESC", nativeQuery = true)
@@ -42,3 +42,18 @@ public interface IndexRepository extends JpaRepository<Index, Integer> {
 }
 
 
+//@Query(value = "SELECT sites.url AS site, " +
+//        "sites.name AS siteName, " +
+//        "pages.path AS uri, " +
+//        "pages.content AS content, " +
+//        "SUM(lemma_rank)/relrev.maxrev AS relevance " +
+//        "FROM indexes JOIN " +
+//        "(SELECT MAX(absrev) AS maxrev FROM (SELECT page_id, SUM(lemma_rank) AS absrev FROM indexes " +
+//        "WHERE page_id IN (?1) " +
+//        "AND lemma_id IN (?2) " +
+//        "GROUP BY page_id) AS result) AS relrev " +
+//        "JOIN pages AS page ON indexes.page_id = pages.id " +
+//        "JOIN sites ON pages.site_id = sites.id " +
+//        "WHERE page_id IN (?1) " +
+//        "AND lemma_id IN (?2) " +
+//        "GROUP BY page_id ORDER BY relevance DESC", nativeQuery = true)

@@ -1,6 +1,5 @@
 package main.services.UrlParser;
 
-
 import lombok.Setter;
 import main.Lemmatisator.Lemmatisator;
 import main.model.Lemma;
@@ -52,9 +51,11 @@ public class UrlParser extends RecursiveAction {
                         .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
                         .referrer("http://www.google.com");
                 Thread.sleep(500);
+                Document document = connection.get();
 
-                Elements tagA = connection.get().getElementsByTag("a");
-                insertData(connection);
+                Elements tagA = document.getElementsByTag("a");
+                int response = connection.response().statusCode();
+                insertData(document, response);
                 for (Element element : tagA) {
                     String lowerCaseElementUrl = element.absUrl("href").toLowerCase(Locale.ROOT);
                     if (isUrlCorrect(lowerCaseElementUrl)) {
@@ -72,16 +73,14 @@ public class UrlParser extends RecursiveAction {
             } catch (IOException | InterruptedException | SQLException e) {
                 siteService.updateErrorMessage(site, url + " - " + e.getMessage());
             }
-            for (UrlParser parser : tasks) {
-                parser.join();
-            }
+//            for (UrlParser parser : tasks) {
+//                parser.join();
+//            }
         }
     }
 
-    public void insertData(Connection connection) throws IOException, SQLException, InterruptedException {
-        int responseCode = connection.response().statusCode();
+    public void insertData(Document document, int responseCode) throws IOException, SQLException, InterruptedException {
         siteService.updateStatusTime(site);
-        Document document = connection.get();
         Page page = pageService.createPageAndSave(url.substring(rootUrl.length()), responseCode,
                 document.html(), site);
         String bodyText = document.body().text();

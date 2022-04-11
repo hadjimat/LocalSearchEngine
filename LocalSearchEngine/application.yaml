@@ -11,5 +11,7 @@ spring:
 
 siteconfig:
   sites:
+    - url: https://skillbox.ru
+      name: skillbox
     - url: https://lenta.ru
       name: lenta

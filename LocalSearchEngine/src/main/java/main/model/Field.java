@@ -9,7 +9,7 @@ import java.util.Collection;
 @Getter
 @Setter
 @Entity
-@Table(name = "fields")
+@Table(name = "_field")
 public class Field {
 
     @Id

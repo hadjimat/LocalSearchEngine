@@ -80,7 +80,6 @@ public class SearchService {
             searchDto.setTitle(Jsoup.parse(pageRelevanceAndData.getContent()).title());
             searchDto.setSnippet(getSnippetInHtml(pageRelevanceAndData.getContent(), findQuery));
             searchDto.setRelevance(pageRelevanceAndData.getRelevance());
-
             searchResult.add(searchDto);
         });
 

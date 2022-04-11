@@ -13,14 +13,14 @@ import java.util.Optional;
 public interface LemmaRepository extends CrudRepository<Lemma, Integer> {
     @Transactional
     @Modifying(clearAutomatically = true, flushAutomatically = true)
-    @Query(value = "INSERT INTO lemmas (frequency, lemma, site_id) " +
+    @Query(value = "INSERT INTO _lemma (frequency, lemma, site_id) " +
             "VALUES (?,?,?) ON DUPLICATE KEY UPDATE frequency = frequency + 1;", nativeQuery = true)
     void insertOnDuplicateUpdate(int frequency, String lemma, int site_id);
 
     Optional<Lemma> findLemmaByLemmaAndSiteBySiteId(String lemmaString, Site siteBySiteId);
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)
-    @Query(value = "UPDATE lemmas set frequency = frequency - 1 " +
+    @Query(value = "UPDATE _lemma set frequency = frequency - 1 " +
             "where id in (select lemma_id from indexes where page_id = ?);", nativeQuery = true)
     void unCountLemmasOfPage(int pageId);
 

@@ -9,9 +9,8 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
-@ToString
 @RequiredArgsConstructor
-@Table(name = "indexes", schema = "search_engine")
+@Table(name = "_index", schema = "search_engine")
 public class Index {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -19,36 +18,28 @@ public class Index {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "page_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "page_id", referencedColumnName = "id", nullable = false,
+            foreignKey = @ForeignKey(foreignKeyDefinition = "FOREIGN KEY (page_id) REFERENCES _page(id) ON DELETE CASCADE"))
     private Page pageByPageId;
 
     @Column(name = "page_id", updatable = false, insertable = false)
     private int pageId;
 
     @ManyToOne
-    @JoinColumn(name = "field_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "field_id", referencedColumnName = "id", nullable = false,
+            foreignKey = @ForeignKey(foreignKeyDefinition = "FOREIGN KEY (field_id) REFERENCES _field(id) ON DELETE CASCADE"))
     private Field fieldByFieldId;
 
     @ManyToOne
-    @JoinColumn(name = "lemma_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "lemma_id", referencedColumnName = "id", nullable = false,
+            foreignKey = @ForeignKey(foreignKeyDefinition = "FOREIGN KEY (lemma_id) REFERENCES _lemma(id) ON DELETE CASCADE"))
     private Lemma lemmaByLemmaId;
 
     @Column(name = "lemma_id", updatable = false, insertable = false)
+
     private int lemmaId;
 
     @Column(name = "lemma_rank")
     private double lemmaRank;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Index index = (Index) o;
-        return id != 0 && Objects.equals(id, index.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
 }
