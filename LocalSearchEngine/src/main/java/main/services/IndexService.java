@@ -3,10 +3,7 @@ package main.services;
 import main.dto.interfaces.IndexPageId;
 import main.dto.interfaces.ModelId;
 import main.dto.interfaces.PageRelevanceAndData;
-import main.model.Index;
-import main.model.IndexRepository;
-import main.model.Lemma;
-import main.model.Page;
+import main.model.*;
 import main.requests.OffsetAndLimitRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,13 +20,20 @@ public class IndexService {
     private FieldService fieldService;
 
     public void addIndex(Index index) {
-        indexRepository.save(index);
+        try {
+            indexRepository.save(index);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     public void createIndexAndSave(Page page, Map<String, Float> lemmasAndRank,
                                    Map<String, Lemma> lemmas,
                                    HashMap<String, Float> titleLemmas,
                                    HashMap<String, Float> bodyLemmas) {
+
+
         createIndex(page, lemmasAndRank, lemmas, titleLemmas, 1);
         createIndex(page, lemmasAndRank, lemmas, bodyLemmas, 2);
     }

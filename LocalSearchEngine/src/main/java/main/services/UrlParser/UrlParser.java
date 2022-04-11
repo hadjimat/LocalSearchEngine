@@ -87,6 +87,8 @@ public class UrlParser extends RecursiveAction {
         String bodyText = document.body().text();
         String titleText =  document.title();
 
+
+
         if (responseCode == 200) {
             HashMap<String, Lemma> lemmaMap = lemmaService.createAndInsertLemmaOnDuplicateUpdateAndGetMap(site,
                     lemmatisator.getLemmaSet(bodyText + " " + titleText));

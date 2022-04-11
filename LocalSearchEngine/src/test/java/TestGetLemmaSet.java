@@ -5,7 +5,6 @@ import org.jsoup.nodes.Document;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.Set;
 
 
 public class TestGetLemmaSet {
@@ -21,5 +20,11 @@ public class TestGetLemmaSet {
         String bodyText = document.body().text();
         String titleText =  document.title();
         System.out.println(lemmatisator.getLemmaSet(bodyText + " " + titleText));
+    }
+
+    @Test
+    public void testCreateIndex(){
+
+
     }
 }

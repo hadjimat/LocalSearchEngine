@@ -26,5 +26,6 @@ public class Field {
     float weight;
 
     @OneToMany(mappedBy = "fieldByFieldId")
-    private Collection<Index> indicesById;
+    private Collection<Index> indexesById;
+
 }
