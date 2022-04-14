@@ -37,7 +37,7 @@ public interface IndexRepository extends JpaRepository<Index, Integer> {
 
     @Override
     @Modifying
-    @Query("DELETE FROM Index")
+    @Query( value = "DELETE FROM Index", nativeQuery = true)
     void deleteAll();
 }
 

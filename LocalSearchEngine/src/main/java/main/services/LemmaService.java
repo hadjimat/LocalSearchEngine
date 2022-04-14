@@ -43,4 +43,9 @@ public class LemmaService {
     public void deleteAllLemmaData(){
         lemmaRepository.deleteAll();
     }
+
+    @Transactional
+    public void deleteLemmaBySiteId(String url){
+        lemmaRepository.deleteLemmaBySiteId(url);
+    }
 }

@@ -62,4 +62,8 @@ public class SiteService {
     public void deleteAllSiteData() {
         siteRepository.deleteAll();
     }
+
+    @Transactional
+    public void deleteSiteData(String url) {
+    }
 }

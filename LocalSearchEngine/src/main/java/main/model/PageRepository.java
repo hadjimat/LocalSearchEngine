@@ -14,6 +14,11 @@ public interface PageRepository extends CrudRepository <Page, Integer> {
 
     Optional<Page> findByPathAndSiteBySiteId(String path, Site site);
 
+    @Modifying
+    @Query(value = "delete from _page " +
+            "where site_id in (select id from _site where url = '?')", nativeQuery = true)
+    void deleteBySiteId(String url);
+
     @Override
     @Modifying
     @Query("DELETE FROM Page")

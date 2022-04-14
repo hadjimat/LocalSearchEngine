@@ -6,6 +6,7 @@ import main.dto.interfaces.ModelId;
 import main.dto.interfaces.PageRelevanceAndData;
 import main.dto.search.PageSearchDto;
 import main.responses.SearchResponse;
+import org.jetbrains.annotations.NotNull;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +30,8 @@ public class SearchService {
         this.lemmatisator = new Lemmatisator();
     }
 
-    public Object search(String findQuery, String siteUrl, int offset, int limit) throws SQLException {
+    public Object search(String findQuery, String siteUrl, int offset, int limit) {
         Set<String> findQueryLemmas = lemmatisator.getLemmaSet(findQuery);
-
         Set<ModelId> allLemmasIds = new HashSet<>();
         Set<IndexPageId> allPageIds = new HashSet<>();
 
@@ -41,6 +41,7 @@ public class SearchService {
                 allLemmasIds.addAll(lemmasIdsOfSite);
                 allPageIds.addAll(getPageIdsOfSite(lemmasIdsOfSite));
             });
+
         } else {
             List<ModelId> lemmasIdsOfSite = lemmaService.findLemmasIdBySiteOrderByFrequency(findQueryLemmas,
                     siteService.findSiteByName(siteUrl));
@@ -54,7 +55,7 @@ public class SearchService {
         return new SearchResponse(allPageIds.size(), createSearchResult(pageData, findQuery));
     }
 
-    private List<IndexPageId> getPageIdsOfSite(List<ModelId> lemmasIdsOfSite) {
+    private List<IndexPageId> getPageIdsOfSite(@NotNull List<ModelId> lemmasIdsOfSite) {
         List<IndexPageId> pageIdsOfSite = new ArrayList<>();
         if (!lemmasIdsOfSite.isEmpty()) {
             pageIdsOfSite = indexService.findPagesIds(lemmasIdsOfSite.get(0).getId());
@@ -82,7 +83,7 @@ public class SearchService {
             searchDto.setRelevance(pageRelevanceAndData.getRelevance());
             searchResult.add(searchDto);
         });
-
+        System.out.println(searchResult);
         return searchResult;
     }
     public static String getSnippetInHtml(String htmlText, String searchQuery) {

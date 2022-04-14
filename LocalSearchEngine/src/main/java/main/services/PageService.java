@@ -35,4 +35,10 @@ public class PageService {
         pageRepository.deleteAll();
     }
 
+    @Transactional
+    public void  deletePage(String url){
+        pageRepository.deleteBySiteId(url);
+
+    }
+
 }
