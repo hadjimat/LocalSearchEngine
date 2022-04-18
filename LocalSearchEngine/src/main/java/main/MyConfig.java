@@ -40,12 +40,10 @@ public class MyConfig implements WebMvcConfigurer {
         return templateEngine;
     }
 
-
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/assets/js/**").addResourceLocations("classpath:/assets/js/");
         registry.addResourceHandler("/assets/css/**").addResourceLocations("classpath:/assets/css/");
-        ///assets/css/fonts.css
         registry.addResourceHandler("/assets/plg/**").addResourceLocations("classpath:/assets/plg/");
         registry.addResourceHandler("/assets/img/icons/**").addResourceLocations("classpath:/assets/img/icons/");
         registry.addResourceHandler("/assets/fonts/Montserrat/**").addResourceLocations("classpath:/assets/fonts/Montserrat/");
@@ -58,7 +56,4 @@ public class MyConfig implements WebMvcConfigurer {
         resolver.setContentType("text/html;charset=UTF-8");
         registry.viewResolver(resolver);
     }
-
-
-
 }

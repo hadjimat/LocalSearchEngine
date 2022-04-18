@@ -1,0 +1,19 @@
+spring.datasource.url: jdbc:mysql://localhost:3306/search_engine?allowPublicKeyRetrieval=true&amp&useSSL=false&amp&serverTimezone=UTC
+spring.datasource.username: root
+spring.datasource.password: testtest
+spring.batch.jdbc.table-prefix: search_engine
+spring.jpa.hibernate.ddl-auto: update
+
+server.port: 8081
+spring.liquibase.change-log: bd/changelog/db.changelog-master.yaml
+spring.liquibase.enabled: true
+
+siteconfig:
+  sites:
+    - url: https://texorbita24.ru/
+      name: tech
+    - url: https://dombulgakova.ru/
+      name: dom
+
+
+

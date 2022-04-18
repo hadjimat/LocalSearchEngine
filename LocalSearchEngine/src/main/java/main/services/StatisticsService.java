@@ -28,7 +28,6 @@ public class StatisticsService {
     public StatisticResponse getStatistics() {
         TotalStatisticsDto totalStatisticsDto = new TotalStatisticsDto(siteRepository.count(), pageRepository.count(),
                 lemmaRepository.count(), true);
-
         List<DetailedStatisticsDto> detailedStatisticsDtoList = new ArrayList<>();
         siteRepository.findAll().forEach(site -> {
             DetailedStatisticsDto detailedStatisticsDto = new DetailedStatisticsDto(site.getUrl(), site.getName(),
@@ -36,7 +35,6 @@ public class StatisticsService {
                     pageRepository.countBySiteBySiteId(site), lemmaRepository.countBySiteBySiteId(site));
             detailedStatisticsDtoList.add(detailedStatisticsDto);
         });
-
         return new StatisticResponse(new StatisticsDto(totalStatisticsDto, detailedStatisticsDtoList));
     }
 

@@ -1,10 +1,7 @@
 package main.model;
 
 import lombok.*;
-import org.hibernate.Hibernate;
-
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 @Getter
@@ -12,6 +9,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Table(name = "_index", schema = "search_engine")
 public class Index {
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")
@@ -41,5 +39,4 @@ public class Index {
 
     @Column(name = "lemma_rank")
     private double lemmaRank;
-
 }

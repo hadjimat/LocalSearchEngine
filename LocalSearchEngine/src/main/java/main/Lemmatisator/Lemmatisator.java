@@ -10,16 +10,14 @@ import java.util.*;
 
 public class Lemmatisator {
 
-
-
     LuceneMorphology luceneMorph = new RussianLuceneMorphology();
 
     public Lemmatisator() throws IOException {
     }
 
-    public HashMap<String, Float> getLemmasOnField(String text) throws IOException {
-        String[] splitText = text.toLowerCase().replaceAll("[^а-яА-Я_\\s]", "").replaceAll("[0-9]","").split(" ");
-        HashMap<String, Float> wordCountMap = new HashMap<String, Float>();
+    public HashMap<String, Float> getLemmasOnField(String text) {
+        String[] splitText = text.toLowerCase().replaceAll("[^а-я\\s]", " ").split("\\s+");
+        HashMap<String, Float> wordCountMap = new HashMap<>();
         for (String word : splitText) {
             if (isCorrectWordType(word) && !word.isEmpty()) {
                 List<String> wordBaseForms = luceneMorph.getNormalForms(word);
@@ -32,7 +30,7 @@ public class Lemmatisator {
     }
 
     public Set<String> getLemmaSet(String text) {
-        String[] textArray = text.toLowerCase().replaceAll("[^а-яА-Я_\\s]", "").replaceAll("[0-9]","").split(" ");
+        String[] textArray = text.toLowerCase().replaceAll("[^а-я\\s]", " ").split("\\s+");
         Set<String> lemmaSet = new HashSet<>();
         for (String word : textArray) {
             if (isCorrectWordType(word) && !word.isEmpty()) {
@@ -58,15 +56,14 @@ public class Lemmatisator {
 
     private boolean isCorrectWordType(String word) {
         try {
+            String wordTypeRegex = ".*(СОЮЗ|МЕЖД|ПРЕДЛ|ЧАСТ)$";
             List<String> wordInfo = luceneMorph.getMorphInfo(word);
             for (String morphInfo : wordInfo) {
-                String wordTypeRegex = ".*(СОЮЗ|МЕЖД|ПРЕДЛ|ЧАСТ)$";
                 if (morphInfo.matches(wordTypeRegex)) {
                     return false;
                 }
             }
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.err.println(word);
+        } catch (ArrayIndexOutOfBoundsException ignored) {
         }
         return true;
     }

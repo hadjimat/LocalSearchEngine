@@ -14,8 +14,10 @@ import java.util.List;
 @Repository
 public interface IndexRepository extends JpaRepository<Index, Integer> {
 
+    @Query("select i from Index i where i.lemmaId = ?1")
     List<IndexPageId> findByLemmaId(int lemmaId);
 
+    @Query("select i from Index i where i.lemmaId = ?1 and i.pageId in ?2")
     List<IndexPageId> findByLemmaIdAndPageIdIn(int lemmaId, List<Integer> pageIds);
 
     @Query(value = "SELECT _site.url AS site, " +
@@ -37,23 +39,6 @@ public interface IndexRepository extends JpaRepository<Index, Integer> {
 
     @Override
     @Modifying
-    @Query( value = "DELETE FROM Index", nativeQuery = true)
+    @Query( value = "DELETE FROM _index", nativeQuery = true)
     void deleteAll();
 }
-
-
-//@Query(value = "SELECT sites.url AS site, " +
-//        "sites.name AS siteName, " +
-//        "pages.path AS uri, " +
-//        "pages.content AS content, " +
-//        "SUM(lemma_rank)/relrev.maxrev AS relevance " +
-//        "FROM indexes JOIN " +
-//        "(SELECT MAX(absrev) AS maxrev FROM (SELECT page_id, SUM(lemma_rank) AS absrev FROM indexes " +
-//        "WHERE page_id IN (?1) " +
-//        "AND lemma_id IN (?2) " +
-//        "GROUP BY page_id) AS result) AS relrev " +
-//        "JOIN pages AS page ON indexes.page_id = pages.id " +
-//        "JOIN sites ON pages.site_id = sites.id " +
-//        "WHERE page_id IN (?1) " +
-//        "AND lemma_id IN (?2) " +
-//        "GROUP BY page_id ORDER BY relevance DESC", nativeQuery = true)

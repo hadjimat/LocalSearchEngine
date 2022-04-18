@@ -31,14 +31,12 @@ public class PageService {
     }
 
     @Transactional
-    public void deleteAllPage(){
+    public void deleteAllPage() {
         pageRepository.deleteAll();
     }
 
     @Transactional
-    public void  deletePage(String url){
+    public void deletePage(String url) {
         pageRepository.deleteBySiteId(url);
-
     }
-
 }

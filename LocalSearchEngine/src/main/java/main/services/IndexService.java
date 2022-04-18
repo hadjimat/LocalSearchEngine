@@ -19,20 +19,11 @@ public class IndexService {
     @Autowired
     private FieldService fieldService;
 
-    public void addIndex(Index index) {
-        try {
-            indexRepository.save(index);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-    }
 
     public void createIndexAndSave(Page page, Map<String, Float> lemmasAndRank,
                                    Map<String, Lemma> lemmas,
                                    HashMap<String, Float> titleLemmas,
                                    HashMap<String, Float> bodyLemmas) {
-
 
         createIndex(page, lemmasAndRank, lemmas, titleLemmas, 1);
         createIndex(page, lemmasAndRank, lemmas, bodyLemmas, 2);
@@ -45,16 +36,19 @@ public class IndexService {
         for (Map.Entry<String, Float> lemma : lemmasOnField.entrySet()) {
             Index index = new Index();
             index.setPageByPageId(page);
-            if (fieldService.getById(fieldId).isPresent()){
-            index.setFieldByFieldId(fieldService.getById(fieldId).get());
-            }
-//                    .orElseThrow(() -> new NullPointerException("field " + fieldId + " Not Found")));
+            index.setFieldByFieldId(fieldService.getById(fieldId)
+                    .orElseThrow(() -> new NullPointerException("field " + fieldId + " Not Found")));
             index.setLemmaByLemmaId(lemmas.get(lemma.getKey()));
             index.setLemmaRank(lemmasAndRank.get(lemma.getKey()));
 
-            addIndex(index);
+            try {
+                indexRepository.save(index);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
+
     @Transactional(readOnly = true)
     public List<IndexPageId> findPagesIds(int lemmaId) {
         return indexRepository.findByLemmaId(lemmaId);
@@ -74,7 +68,6 @@ public class IndexService {
         pageIdList.forEach(indexPageId -> pageIds.add(indexPageId.getPageId()));
         ArrayList<Integer> lemmaIds = new ArrayList<>();
         lemmaIdList.forEach(indexLemmaId -> lemmaIds.add(indexLemmaId.getId()));
-
         return indexRepository.findPageRelevanceAndData(pageIds, lemmaIds, new OffsetAndLimitRequest(limit, offset));
     }
 

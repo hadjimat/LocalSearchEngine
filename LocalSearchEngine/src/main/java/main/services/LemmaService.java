@@ -25,7 +25,6 @@ public class LemmaService {
             Optional<Lemma> optionalLemma = lemmaRepository.findLemmaByLemmaAndSiteBySiteId(lemmaString, site);
             optionalLemma.ifPresent(lemma -> lemmaMap.put(lemma.getLemma(), lemma));
         }
-
         return lemmaMap;
     }
 

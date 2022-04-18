@@ -27,5 +27,4 @@ public class Field {
 
     @OneToMany(mappedBy = "fieldByFieldId")
     private Collection<Index> indexesById;
-
 }

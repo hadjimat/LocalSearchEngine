@@ -34,24 +34,20 @@ public class SearchService {
         Set<String> findQueryLemmas = lemmatisator.getLemmaSet(findQuery);
         Set<ModelId> allLemmasIds = new HashSet<>();
         Set<IndexPageId> allPageIds = new HashSet<>();
-
         if (siteUrl == null) {
             siteService.findAllSites().forEach(site -> {
                 List<ModelId> lemmasIdsOfSite = lemmaService.findLemmasIdBySiteOrderByFrequency(findQueryLemmas, site);
                 allLemmasIds.addAll(lemmasIdsOfSite);
                 allPageIds.addAll(getPageIdsOfSite(lemmasIdsOfSite));
             });
-
         } else {
             List<ModelId> lemmasIdsOfSite = lemmaService.findLemmasIdBySiteOrderByFrequency(findQueryLemmas,
                     siteService.findSiteByName(siteUrl));
             allLemmasIds.addAll(lemmasIdsOfSite);
             allPageIds.addAll(getPageIdsOfSite(lemmasIdsOfSite));
         }
-
         List<PageRelevanceAndData> pageData = indexService.findPageRelevanceAndData(allPageIds, allLemmasIds,
                 limit, offset);
-
         return new SearchResponse(allPageIds.size(), createSearchResult(pageData, findQuery));
     }
 
@@ -72,7 +68,6 @@ public class SearchService {
 
     private ArrayList<PageSearchDto> createSearchResult(List<PageRelevanceAndData> pageData, String findQuery) {
         ArrayList<PageSearchDto> searchResult = new ArrayList<>();
-
         pageData.forEach(pageRelevanceAndData -> {
             PageSearchDto searchDto = new PageSearchDto();
             searchDto.setSite(pageRelevanceAndData.getSite());
@@ -83,28 +78,24 @@ public class SearchService {
             searchDto.setRelevance(pageRelevanceAndData.getRelevance());
             searchResult.add(searchDto);
         });
-        System.out.println(searchResult);
         return searchResult;
     }
+
     public static String getSnippetInHtml(String htmlText, String searchQuery) {
         Document doc = Jsoup.parse(htmlText);
         String textOfSearchQuery = doc.getElementsContainingOwnText(searchQuery).text();
         String[] queryWords = searchQuery.split("\\s+");
-
         if (!textOfSearchQuery.isEmpty()) {
             int firstIndexOfSnippet = textOfSearchQuery.indexOf(searchQuery) > 80 ?
                     textOfSearchQuery.indexOf(searchQuery) - 80 : 0;
             int lastIndexOfSnippet = Math.min(firstIndexOfSnippet + searchQuery.length() + 160,
                     textOfSearchQuery.length());
-
             String firstWordSnippet = textOfSearchQuery.substring(firstIndexOfSnippet, lastIndexOfSnippet)
                     .replaceAll(createSnippetRegex(queryWords[0]), "<b>" + queryWords[0]);
-
             return firstWordSnippet.replaceAll(createSnippetRegex(queryWords[queryWords.length - 1]),
                     queryWords[queryWords.length - 1] + "</b>");
         } else {
             StringBuilder snippetBuilder = new StringBuilder();
-
             for (String word : queryWords) {
                 String substring = word.substring(0, word.length() - 2);
                 String textOfSearchWord = doc.getElementsContainingOwnText(substring).text();
@@ -118,7 +109,6 @@ public class SearchService {
                     snippetBuilder.append("...");
                 }
             }
-
             return snippetBuilder.toString();
         }
     }

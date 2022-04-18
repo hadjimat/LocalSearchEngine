@@ -10,8 +10,10 @@ import java.util.Optional;
 @Repository
 public interface PageRepository extends CrudRepository <Page, Integer> {
 
+    @Query("select count(p) from Page p where p.siteBySiteId = ?1")
     long countBySiteBySiteId(Site siteBySiteId);
 
+    @Query("select p from Page p where p.path = ?1 and p.siteBySiteId = ?2")
     Optional<Page> findByPathAndSiteBySiteId(String path, Site site);
 
     @Modifying

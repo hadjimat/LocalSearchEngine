@@ -1,7 +1,6 @@
 package main.model;
 
 import lombok.*;
-import org.springframework.data.jpa.repository.Query;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -13,6 +12,7 @@ import java.util.Collection;
 @RequiredArgsConstructor
 @Table(name = "_site", schema = "search_engine")
 public class Site {
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")

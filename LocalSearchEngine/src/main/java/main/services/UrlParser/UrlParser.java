@@ -4,6 +4,7 @@ import lombok.Setter;
 import main.Lemmatisator.Lemmatisator;
 import main.model.Lemma;
 import main.model.Page;
+import main.model.PageRepository;
 import main.model.Site;
 import main.services.IndexService;
 import main.services.LemmaService;
@@ -14,6 +15,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -34,6 +36,8 @@ public class UrlParser extends RecursiveAction {
     private LemmaService lemmaService;
     private PageService pageService;
     private SiteService siteService;
+    @Autowired
+    private PageRepository pageRepository;
 
     public UrlParser(String url, Site site, Set<String> urlSet) {
         this.url = url.toLowerCase(Locale.ROOT);
@@ -51,11 +55,11 @@ public class UrlParser extends RecursiveAction {
                         .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
                         .referrer("http://www.google.com");
                 Thread.sleep(500);
-                Document document = connection.get();
-
+                Connection.Response response = connection.execute();
+                int responseCode = connection.response().statusCode();
+                Document document = response.parse();
                 Elements tagA = document.getElementsByTag("a");
-                int response = connection.response().statusCode();
-                insertData(document, response);
+                insertData(document, responseCode);
                 for (Element element : tagA) {
                     String lowerCaseElementUrl = element.absUrl("href").toLowerCase(Locale.ROOT);
                     if (isUrlCorrect(lowerCaseElementUrl)) {
@@ -73,9 +77,9 @@ public class UrlParser extends RecursiveAction {
             } catch (IOException | InterruptedException | SQLException e) {
                 siteService.updateErrorMessage(site, url + " - " + e.getMessage());
             }
-//            for (UrlParser parser : tasks) {
-//                parser.join();
-//            }
+            for (UrlParser parser : tasks) {
+                parser.join();
+            }
         }
     }
 
@@ -86,10 +90,8 @@ public class UrlParser extends RecursiveAction {
         String bodyText = document.body().text();
         String titleText =  document.title();
 
-
-
         if (responseCode == 200) {
-            HashMap<String, Lemma> lemmaMap = lemmaService.createAndInsertLemmaOnDuplicateUpdateAndGetMap(site,
+            Map<String, Lemma> lemmaMap = lemmaService.createAndInsertLemmaOnDuplicateUpdateAndGetMap(site,
                     lemmatisator.getLemmaSet(bodyText + " " + titleText));
             HashMap<String, Float> titleLemmasCount = lemmatisator.getLemmasOnField(titleText);
             HashMap<String, Float> bodyLemmasCount = lemmatisator.getLemmasOnField(bodyText);
