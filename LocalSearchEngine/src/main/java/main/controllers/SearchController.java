@@ -15,8 +15,7 @@ import java.sql.SQLException;
 @RequiredArgsConstructor
 public class SearchController {
 
-    @Autowired
-    SearchService searchService;
+    private final SearchService searchService;
 
     @ResponseBody
     @GetMapping("/search")

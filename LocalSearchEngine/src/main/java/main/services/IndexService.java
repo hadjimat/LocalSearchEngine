@@ -5,7 +5,6 @@ import main.dto.interfaces.ModelId;
 import main.dto.interfaces.PageRelevanceAndData;
 import main.model.*;
 import main.requests.OffsetAndLimitRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,11 +12,14 @@ import java.util.*;
 
 @Service
 public class IndexService {
-    @Autowired
-    private IndexRepository indexRepository;
 
-    @Autowired
-    private FieldService fieldService;
+    private final IndexRepository indexRepository;
+    private final FieldService fieldService;
+
+    public IndexService(IndexRepository indexRepository, FieldService fieldService) {
+        this.indexRepository = indexRepository;
+        this.fieldService = fieldService;
+    }
 
 
     public void createIndexAndSave(Page page, Map<String, Float> lemmasAndRank,

@@ -1,4 +1,4 @@
-package main.Lemmatisator;
+package main.lemmatisator;
 
 import main.model.Lemma;
 import org.apache.lucene.morphology.LuceneMorphology;

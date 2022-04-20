@@ -6,8 +6,7 @@ import main.model.FieldRepository;
 import main.model.Site;
 import main.responses.ErrorResponse;
 import main.services.SiteService;
-import main.services.UrlParser.UrlParserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import main.services.url_parser.UrlParserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,17 +22,10 @@ import java.util.Locale;
 @RequiredArgsConstructor
 public class IndexingController {
 
-    @Autowired
-    private UrlParserService urlParserService;
-
-    @Autowired
-    private SitesConfig sitesConfig;
-
-    @Autowired
-    private SiteService siteService;
-
-    @Autowired
-    FieldRepository fieldRepository;
+    private final UrlParserService urlParserService;
+    private final SitesConfig sitesConfig;
+    private final SiteService siteService;
+    private final FieldRepository fieldRepository;
 
     @GetMapping("/startIndexing")
     public ResponseEntity<Object> startIndexing() {

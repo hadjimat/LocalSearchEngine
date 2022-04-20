@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class StatisticsController {
 
-    @Autowired
-    private StatisticsService statisticsService;
+    private final StatisticsService statisticsService;
 
     @GetMapping("/statistics")
     public ResponseEntity<Object> getStatistics() {

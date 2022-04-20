@@ -1,6 +1,6 @@
 package main.services;
 
-import main.Lemmatisator.Lemmatisator;
+import main.lemmatisator.Lemmatisator;
 import main.dto.interfaces.IndexPageId;
 import main.dto.interfaces.ModelId;
 import main.dto.interfaces.PageRelevanceAndData;
@@ -9,24 +9,22 @@ import main.responses.SearchResponse;
 import org.jetbrains.annotations.NotNull;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.*;
 
 @Service
 public class SearchService {
     private final Lemmatisator lemmatisator;
-    @Autowired
-    LemmaService lemmaService;
-    @Autowired
-    IndexService indexService;
-    @Autowired
-    SiteService siteService;
+    private final LemmaService lemmaService;
+    private final IndexService indexService;
+    private final SiteService siteService;
 
-    public SearchService() throws IOException {
+    public SearchService(LemmaService lemmaService, IndexService indexService, SiteService siteService) throws IOException {
+        this.lemmaService = lemmaService;
+        this.indexService = indexService;
+        this.siteService = siteService;
         this.lemmatisator = new Lemmatisator();
     }
 

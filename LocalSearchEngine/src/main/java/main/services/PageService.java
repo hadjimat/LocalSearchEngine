@@ -3,7 +3,6 @@ package main.services;
 import main.model.Page;
 import main.model.PageRepository;
 import main.model.Site;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,8 +10,12 @@ import java.util.Optional;
 
 @Service
 public class PageService {
-    @Autowired
-    private PageRepository pageRepository;
+
+    private final PageRepository pageRepository;
+
+    public PageService(PageRepository pageRepository) {
+        this.pageRepository = pageRepository;
+    }
 
     public Page createPageAndSave(String path, int code, String content, Site site) {
         Page page = new Page(path, code, content, site);

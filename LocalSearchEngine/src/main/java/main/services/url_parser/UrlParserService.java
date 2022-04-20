@@ -1,8 +1,9 @@
-package main.services.UrlParser;
+package main.services.url_parser;
 
-import main.Lemmatisator.Lemmatisator;
+import main.lemmatisator.Lemmatisator;
 import main.SitesConfig;
 import main.model.Page;
+import main.model.PageRepository;
 import main.model.Site;
 import main.model.SiteStatusType;
 import main.responses.ResultResponse;
@@ -10,7 +11,6 @@ import main.services.IndexService;
 import main.services.LemmaService;
 import main.services.PageService;
 import main.services.SiteService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -21,16 +21,22 @@ import java.util.concurrent.ForkJoinPool;
 
 @Service
 public class UrlParserService {
-    @Autowired
-    private SitesConfig sitesConfig;
-    @Autowired
-    private IndexService indexService;
-    @Autowired
-    private LemmaService lemmaService;
-    @Autowired
-    private PageService pageService;
-    @Autowired
-    private SiteService siteService;
+
+    private final SitesConfig sitesConfig;
+    private final IndexService indexService;
+    private final LemmaService lemmaService;
+    private final PageService pageService;
+    private final SiteService siteService;
+    private final PageRepository pageRepository;
+
+    public UrlParserService(SitesConfig sitesConfig, IndexService indexService, LemmaService lemmaService, PageService pageService, SiteService siteService, PageRepository pageRepository) {
+        this.sitesConfig = sitesConfig;
+        this.indexService = indexService;
+        this.lemmaService = lemmaService;
+        this.pageService = pageService;
+        this.siteService = siteService;
+        this.pageRepository = pageRepository;
+    }
 
     public Object startIndexing() {
         ArrayList<Site> sitesConfigSites = sitesConfig.getSites();
@@ -102,7 +108,7 @@ public class UrlParserService {
         ForkJoinPool forkJoinPool = new ForkJoinPool();
         Set<String> parsedURLs = Collections.synchronizedSet(new HashSet<>());
         parsedURLs.add(dbSite.getUrl().toLowerCase(Locale.ROOT) + "/");
-        UrlParser urlParser = new UrlParser(dbSite.getUrl().toLowerCase(Locale.ROOT) + "/", dbSite, parsedURLs);
+        UrlParser urlParser = new UrlParser(dbSite.getUrl().toLowerCase(Locale.ROOT) + "/", dbSite, parsedURLs, pageRepository);
         urlParser.setIndexService(indexService);
         urlParser.setLemmaService(lemmaService);
         urlParser.setPageService(pageService);

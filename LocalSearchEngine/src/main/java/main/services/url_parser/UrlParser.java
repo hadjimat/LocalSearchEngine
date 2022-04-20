@@ -1,7 +1,7 @@
-package main.services.UrlParser;
+package main.services.url_parser;
 
 import lombok.Setter;
-import main.Lemmatisator.Lemmatisator;
+import main.lemmatisator.Lemmatisator;
 import main.model.Lemma;
 import main.model.Page;
 import main.model.PageRepository;
@@ -15,7 +15,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -36,14 +35,14 @@ public class UrlParser extends RecursiveAction {
     private LemmaService lemmaService;
     private PageService pageService;
     private SiteService siteService;
-    @Autowired
-    private PageRepository pageRepository;
+    private final PageRepository pageRepository;
 
-    public UrlParser(String url, Site site, Set<String> urlSet) {
+    public UrlParser(String url, Site site, Set<String> urlSet, PageRepository pageRepository) {
         this.url = url.toLowerCase(Locale.ROOT);
         this.urlSet = urlSet;
         this.rootUrl = site.getUrl();
         this.site = site;
+        this.pageRepository = pageRepository;
     }
 
     @Override
@@ -64,7 +63,7 @@ public class UrlParser extends RecursiveAction {
                     String lowerCaseElementUrl = element.absUrl("href").toLowerCase(Locale.ROOT);
                     if (isUrlCorrect(lowerCaseElementUrl)) {
                         urlSet.add(lowerCaseElementUrl);
-                        UrlParser subTask = new UrlParser(lowerCaseElementUrl, site, urlSet);
+                        UrlParser subTask = new UrlParser(lowerCaseElementUrl, site, urlSet, pageRepository);
                         subTask.setIndexService(indexService);
                         subTask.setLemmaService(lemmaService);
                         subTask.setPageService(pageService);

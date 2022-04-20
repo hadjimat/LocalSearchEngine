@@ -7,7 +7,6 @@ import main.model.LemmaRepository;
 import main.model.PageRepository;
 import main.model.SiteRepository;
 import main.responses.StatisticResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,14 +14,16 @@ import java.util.List;
 
 @Service
 public class StatisticsService {
-    @Autowired
-    private SiteRepository siteRepository;
 
-    @Autowired
-    private PageRepository pageRepository;
+    private final SiteRepository siteRepository;
+    private final PageRepository pageRepository;
+    private final LemmaRepository lemmaRepository;
 
-    @Autowired
-    private LemmaRepository lemmaRepository;
+    public StatisticsService(SiteRepository siteRepository, PageRepository pageRepository, LemmaRepository lemmaRepository) {
+        this.siteRepository = siteRepository;
+        this.pageRepository = pageRepository;
+        this.lemmaRepository = lemmaRepository;
+    }
 
 
     public StatisticResponse getStatistics() {

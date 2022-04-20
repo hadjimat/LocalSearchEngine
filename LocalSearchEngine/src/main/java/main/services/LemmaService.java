@@ -4,7 +4,6 @@ import main.dto.interfaces.ModelId;
 import main.model.Lemma;
 import main.model.LemmaRepository;
 import main.model.Site;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,8 +14,12 @@ import java.util.Set;
 
 @Service
 public class LemmaService {
-    @Autowired
-    private LemmaRepository lemmaRepository;
+
+    private final LemmaRepository lemmaRepository;
+
+    public LemmaService(LemmaRepository lemmaRepository) {
+        this.lemmaRepository = lemmaRepository;
+    }
 
     public HashMap<String, Lemma> createAndInsertLemmaOnDuplicateUpdateAndGetMap(Site site, Set<String> lemmaSet) {
         HashMap<String, Lemma> lemmaMap = new HashMap<>();

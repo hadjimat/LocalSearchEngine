@@ -5,7 +5,6 @@ import lombok.Setter;
 import main.model.Site;
 import main.model.SiteRepository;
 import main.model.SiteStatusType;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,8 +13,8 @@ import java.util.Optional;
 
 @Service
 public class SiteService {
-    @Autowired
-    private SiteRepository siteRepository;
+
+    private final SiteRepository siteRepository;
 
     @Getter
     @Setter
@@ -24,6 +23,10 @@ public class SiteService {
     @Getter
     @Setter
     private boolean indexingStopFlag;
+
+    public SiteService(SiteRepository siteRepository) {
+        this.siteRepository = siteRepository;
+    }
 
     @Transactional(readOnly = true)
     public Iterable<Site> findAllSites() {
