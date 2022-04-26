@@ -1,7 +1,7 @@
 package main.controllers;
 
 import lombok.RequiredArgsConstructor;
-import main.SitesConfig;
+import main.config.SitesConfig;
 import main.model.FieldRepository;
 import main.model.Site;
 import main.responses.ErrorResponse;

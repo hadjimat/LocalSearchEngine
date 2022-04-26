@@ -1,4 +1,4 @@
-package main;
+package main.config;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;

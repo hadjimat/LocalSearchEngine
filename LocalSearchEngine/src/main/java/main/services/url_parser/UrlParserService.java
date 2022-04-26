@@ -1,7 +1,7 @@
 package main.services.url_parser;
 
 import main.lemmatisator.Lemmatisator;
-import main.SitesConfig;
+import main.config.SitesConfig;
 import main.model.Page;
 import main.model.PageRepository;
 import main.model.Site;
